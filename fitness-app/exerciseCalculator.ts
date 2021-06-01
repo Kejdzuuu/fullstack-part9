@@ -1,4 +1,4 @@
-import { parseArguments } from './argumentParser'
+import { parseArguments } from './argumentParser';
 
 interface ExerciseResult {
   numOfDays: number;
@@ -11,8 +11,8 @@ interface ExerciseResult {
 } 
 
 const calculateExercise = (dailyExercise: Array<number>, target: number): ExerciseResult => {
-  let hoursSum: number = 0;
-  let trainingDays: number = 0;
+  let hoursSum = 0;
+  let trainingDays = 0;
 
   for (const hours of dailyExercise) {
     hoursSum += hours;
@@ -22,9 +22,9 @@ const calculateExercise = (dailyExercise: Array<number>, target: number): Exerci
   }
 
   const averageHours: number = hoursSum / dailyExercise.length;
-  let rating: number = 0;
-  let ratingDescription: string = '';
-  let targetReached: boolean = false;
+  let rating = 0;
+  let ratingDescription = '';
+  let targetReached = false;
 
   if (averageHours/target >= 1) {
     rating = 3;
@@ -46,12 +46,14 @@ const calculateExercise = (dailyExercise: Array<number>, target: number): Exerci
     targetReached: targetReached,
     rating: rating,
     ratingDescription: ratingDescription
-  }
-}
+  };
+};
 
 try {
   const args = parseArguments(process.argv.slice(2));
   console.log(calculateExercise(args.slice(1), args[0]));
 } catch (e) {
-  console.log('Error: ', e.message);
+  if (e instanceof Error) {
+    console.log('Error: ', e.message);
+  }
 }

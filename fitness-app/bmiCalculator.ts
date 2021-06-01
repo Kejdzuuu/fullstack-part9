@@ -1,4 +1,4 @@
-import { parseArguments } from './argumentParser'
+import { parseArguments } from './argumentParser';
 
 export const calculateBmi = (height: number, weight: number): string => {
   if (height <= 0) {
@@ -17,11 +17,13 @@ export const calculateBmi = (height: number, weight: number): string => {
   } else {
     return "Obese";
   }
-}
+};
 
 try {
   const args = parseArguments(process.argv.slice(2));
   console.log(calculateBmi(args[0], args[1]));
 } catch (e) {
-  console.log('Error: ', e.message);
+  if (e instanceof Error) {
+    console.log('Error: ', e.message);
+  }
 }

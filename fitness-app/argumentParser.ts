@@ -1,4 +1,4 @@
-export const parseArguments = (args: Array<string>, minLength: number = 2): Array<number> => {
+export const parseArguments = (args: Array<string>, minLength = 2): Array<number> => {
   if (args.length < minLength) throw new Error('Too few arguments');
 
   for (const arg of args) {
@@ -8,4 +8,4 @@ export const parseArguments = (args: Array<string>, minLength: number = 2): Arra
   }
 
   return args.map(num => Number(num));
-}
+};
