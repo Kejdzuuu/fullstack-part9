@@ -1,3 +1,5 @@
+import { parseArguments } from './argumentParser'
+
 interface ExerciseResult {
   numOfDays: number;
   numOfTrainingDays: number;
@@ -47,4 +49,9 @@ const calculateExercise = (dailyExercise: Array<number>, target: number): Exerci
   }
 }
 
-console.log(calculateExercise([3, 0, 2, 4.5, 0, 3, 1], 2));
+try {
+  const args = parseArguments(process.argv);
+  console.log(calculateExercise(args.slice(1), args[0]));
+} catch (e) {
+  console.log('Error: ', e.message);
+}

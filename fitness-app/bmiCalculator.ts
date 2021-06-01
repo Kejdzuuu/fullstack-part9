@@ -1,4 +1,10 @@
+import { parseArguments } from './argumentParser'
+
 const calculateBmi = (height: number, weight: number): string => {
+  if (height <= 0) {
+    return 'Height must be bigger than zero';
+  }
+
   height = height / 100;
   const bmi = weight / (height * height);
 
@@ -13,4 +19,9 @@ const calculateBmi = (height: number, weight: number): string => {
   }
 }
 
-console.log(calculateBmi(180, 99));
+try {
+  const args = parseArguments(process.argv);
+  console.log(calculateBmi(args[0], args[1]));
+} catch (e) {
+  console.log('Error: ', e.message);
+}
