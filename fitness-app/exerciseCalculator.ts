@@ -50,7 +50,7 @@ const calculateExercise = (dailyExercise: Array<number>, target: number): Exerci
 }
 
 try {
-  const args = parseArguments(process.argv);
+  const args = parseArguments(process.argv.slice(2));
   console.log(calculateExercise(args.slice(1), args[0]));
 } catch (e) {
   console.log('Error: ', e.message);
