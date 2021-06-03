@@ -10,7 +10,7 @@ interface ExerciseResult {
   ratingDescription: string;
 } 
 
-const calculateExercise = (dailyExercise: Array<number>, target: number): ExerciseResult => {
+export const calculateExercise = (dailyExercise: Array<number>, target: number): ExerciseResult => {
   let hoursSum = 0;
   let trainingDays = 0;
 
