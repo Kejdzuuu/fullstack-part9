@@ -40,7 +40,7 @@ app.post('/exercises', (req, res) => {
       error: 'malformatted parameters'
     });
   }
-})
+});
 
 const PORT = 3003;
 
