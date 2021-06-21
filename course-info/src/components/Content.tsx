@@ -1,15 +1,12 @@
 import React from 'react';
+import Part from './Part';
+import { CoursePart } from '../App';
 
-interface ContentProps {
-  name: string;
-  exerciseCount: number;
-}
-
-const Content = ({courses}: {courses: Array<ContentProps>}) => {
+const Content = ({courses}: {courses: Array<CoursePart>}) => {
   return (
     <div>
       {courses.map((course, index) =>
-        <p key={index}>{course.name} {course.exerciseCount}</p>
+        <Part course={course} key={index} />
       )}
     </div>
   );
