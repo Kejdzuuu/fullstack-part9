@@ -31,7 +31,8 @@ const parseNewPatient = ({ name, dateOfBirth, ssn, gender, occupation }: Patient
     dateOfBirth: parseString(dateOfBirth, 'dateOfBirth'),
     ssn: parseString(ssn, 'ssn'),
     gender: parseGender(gender),
-    occupation: parseString(occupation, 'occupation')
+    occupation: parseString(occupation, 'occupation'),
+    entries: []
   };
 
   return newPatient;
