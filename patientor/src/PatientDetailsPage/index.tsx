@@ -1,10 +1,10 @@
 import React from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Patient } from "../types";
+import { Entry, Patient } from "../types";
 import { getPatientDetails, useStateValue } from "../state";
 import { apiBaseUrl } from "../constants";
-import { Header, Icon, List } from "semantic-ui-react";
+import { Container, Header, Icon, List } from "semantic-ui-react";
 import { SemanticICONS } from "semantic-ui-react/dist/commonjs/generic";
 
 
@@ -29,6 +29,34 @@ const PatientDetailsPage = () => {
       default:
         return "question";
     }
+  };
+
+  const PatientEntries = () => {
+
+    const DiagnosisCodes = (entry: Entry) => {
+      if (!entry.diagnosisCodes) {
+        return null;
+      }
+
+      return (
+        <List bulleted>
+          {Object.values(entry.diagnosisCodes).map((code: string, index: number) => (
+            <List.Item key={index}>{code}</List.Item>
+          ))}
+        </List>
+      );
+    };
+
+    return (
+      <div>
+        {Object.values(patients[id].entries as Entry[]).map((entry: Entry, index: number) => (
+          <Container key={index}>
+            <p>{entry.date} <i>{entry.description}</i></p>
+            <DiagnosisCodes {...entry} />
+          </Container>
+        ))}
+      </div>
+    );
   };
 
   React.useEffect(() => {
@@ -66,6 +94,10 @@ const PatientDetailsPage = () => {
         <List.Item>ssn: {patients[id].ssn}</List.Item>
         <List.Item>occupation: {patients[id].occupation}</List.Item>
       </List>
+      <Header as="h3">
+        entries
+      </Header>
+      <PatientEntries />
     </div>
   );
 };
