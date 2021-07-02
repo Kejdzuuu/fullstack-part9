@@ -1,11 +1,12 @@
 import React, { FC } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Entry, Patient } from "../types";
+import { Entry, Patient, HealthCheckEntry, HospitalEntry, OccupationalHealthcareEntry } from "../types";
 import { getPatientDetails, useStateValue } from "../state";
 import { apiBaseUrl } from "../constants";
-import { Container, Header, Icon, List } from "semantic-ui-react";
+import { Header, Icon, List, Segment } from "semantic-ui-react";
 import { SemanticICONS } from "semantic-ui-react/dist/commonjs/generic";
+import HealthRatingBar from "../components/HealthRatingBar";
 
 
 const PatientDetailsPage = () => {
@@ -33,7 +34,7 @@ const PatientDetailsPage = () => {
 
   const PatientEntries = () => {
 
-    const DiagnosisCodes = (entry: Entry) => {
+    const Diagnoses = (entry: Entry) => {
 
       const DiagnosisCodeDescription: FC<{code: string}> = (props) => {
         const diagnosis = diagnoses[props.code];
@@ -44,7 +45,7 @@ const PatientDetailsPage = () => {
 
         return (
           <div>
-            {props.code} {diagnosis.name}
+            <b>{props.code}</b> {diagnosis.name}
           </div>
         );
       };
@@ -64,13 +65,97 @@ const PatientDetailsPage = () => {
       );
     };
 
+    const assertNever = (value: never): never => {
+      throw new Error(
+        `Unhandled discriminated union member: ${JSON.stringify(value)}`
+      );
+    };
+
+    const HealthCheckEntry: FC<{ entry: HealthCheckEntry }> = ({ entry }) => {
+      return (
+        <div>
+          <Header as="h3">
+            {entry.date}
+            <Icon name="doctor" />
+          </Header>
+          <p><i>{entry.description}</i></p>
+          <Diagnoses {...entry} />
+          <HealthRatingBar showText={false} rating={entry.healthCheckRating} />
+        </div>
+      );
+    };
+
+    const HospitalEntry: FC<{ entry: HospitalEntry }> = ({ entry }) => {
+      return (
+        <div>
+          <Header as="h3">
+            {entry.date}
+            <Icon name="hospital" />
+          </Header>
+          <p><i>{entry.description}</i></p>
+          <Diagnoses {...entry} />
+          <Header as="h4">
+            Discharge:
+          </Header>
+          <p>
+            <b>{entry.discharge.date}</b> {entry.discharge.criteria}
+          </p>
+        </div>
+      );
+    };
+
+    const OccupationalHealthcareEntry: FC<{ entry: OccupationalHealthcareEntry }> = ({ entry }) => {
+
+      const SickLeaveDetails = () => {
+        if (!entry.sickLeave) {
+          return null;
+        }
+
+        return (
+          <div>
+            <Header as="h4">
+              Sick Leave:
+            </Header>
+            <p>
+              {entry.sickLeave.startDate} - {entry.sickLeave.endDate}
+            </p>
+          </div>
+        );
+      };
+
+      return (
+        <div>
+          <Header as="h3">
+            {entry.date}
+            <Icon name="building" />
+            {entry.employerName}
+          </Header>
+          <p><i>{entry.description}</i></p>
+          <Diagnoses {...entry} />
+          <SickLeaveDetails />
+        </div>
+      );
+    };
+
+    const EntryDetails: FC<{ entry: Entry }> = ({ entry }) => {
+      switch (entry.type) {
+      case "HealthCheck":
+        return <HealthCheckEntry entry={entry} />;
+      case "Hospital":
+        return <HospitalEntry entry={entry} />;
+      case "OccupationalHealthcare":
+        return <OccupationalHealthcareEntry entry={entry} />;
+      default:
+        return assertNever(entry);
+      }
+    };
+
     return (
       <div>
         {Object.values(patients[id].entries as Entry[]).map((entry: Entry, index: number) => (
-          <Container key={index}>
-            <p>{entry.date} <i>{entry.description}</i></p>
-            <DiagnosisCodes {...entry} />
-          </Container>
+          <Segment key={index}>
+            <EntryDetails entry={entry} />
+          </Segment>
         ))}
       </div>
     );
