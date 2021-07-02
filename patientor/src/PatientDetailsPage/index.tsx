@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Entry, Patient } from "../types";
@@ -9,7 +9,7 @@ import { SemanticICONS } from "semantic-ui-react/dist/commonjs/generic";
 
 
 const PatientDetailsPage = () => {
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients, diagnoses }, dispatch] = useStateValue();
   const { id } = useParams<{ id: string }>();
 
   const isPatientDataFetched = (): boolean => {
@@ -34,6 +34,21 @@ const PatientDetailsPage = () => {
   const PatientEntries = () => {
 
     const DiagnosisCodes = (entry: Entry) => {
+
+      const DiagnosisCodeDescription: FC<{code: string}> = (props) => {
+        const diagnosis = diagnoses[props.code];
+
+        if (!diagnosis) {
+          return null;
+        }
+
+        return (
+          <div>
+            {props.code} {diagnosis.name}
+          </div>
+        );
+      };
+
       if (!entry.diagnosisCodes) {
         return null;
       }
@@ -41,7 +56,9 @@ const PatientDetailsPage = () => {
       return (
         <List bulleted>
           {Object.values(entry.diagnosisCodes).map((code: string, index: number) => (
-            <List.Item key={index}>{code}</List.Item>
+            <List.Item key={index}>
+              <DiagnosisCodeDescription code={code} />
+            </List.Item>
           ))}
         </List>
       );
