@@ -24,7 +24,7 @@ const addPatient = (patient: NewPatient): Patient => {
   return newPatient;
 };
 
-const updatePatient = (id: string, newEntry: Entry): Entry => {
+const updatePatient = (id: string, newEntry: Entry): Patient => {
   const entry = {
     ...newEntry,
     id: uuid()
@@ -33,7 +33,7 @@ const updatePatient = (id: string, newEntry: Entry): Entry => {
   const patientIndex = patients.findIndex(patient => patient.id === id);
   patients[patientIndex].entries.push(entry);
 
-  return entry;
+  return patients[patientIndex];
 };
 
 export default { getEntries, getNonSensitiveEntries, addPatient, getEntry, updatePatient };

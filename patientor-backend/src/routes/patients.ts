@@ -31,8 +31,8 @@ router.post('/', (req, res) => {
 router.post('/:id/entries', (req, res) => {
   try {
     const newEntry = parseNewEntry(req.body);
-    const postedEntry = patientService.updatePatient(req.params.id, newEntry);
-    res.json(postedEntry);
+    const updatedPatient = patientService.updatePatient(req.params.id, newEntry);
+    res.json(updatedPatient);
   } catch (e) {
     res.status(400).send(e.message);
   }
